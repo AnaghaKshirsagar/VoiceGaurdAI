@@ -1,0 +1,11 @@
+streamlit
+librosa
+numpy
+soundfile
+
+transformers
+torch
+torchaudio
+
+onnxruntime
+huggingface_hub
