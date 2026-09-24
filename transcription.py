@@ -1,61 +1,71 @@
 from transformers import pipeline
 
-MODEL_NAME = "openai/whisper-small"
+# Lightweight Whisper model for deployment
+MODEL_NAME = "openai/whisper-tiny"
 
 print("Loading VoiceGuard AI speech-to-text model...")
 
 transcriber = pipeline(
     "automatic-speech-recognition",
     model=MODEL_NAME,
-    device=-1
+    device=-1,
 )
 
 print("Speech-to-text model loaded successfully!")
 
 
 def transcribe_audio(file_path):
-    print("\nStarting FULL AUDIO transcription...")
+    """
+    Transcribe an audio file using Whisper Tiny.
 
-    result = transcriber(
-        file_path,
-        chunk_length_s=30,
-        stride_length_s=(5, 5),
-        return_timestamps=True,
-        generate_kwargs={
-            "task": "transcribe",
-            "language": "english",
-            "condition_on_prev_tokens": True,
-            "no_repeat_ngram_size": 3,
-            "repetition_penalty": 1.05
-        }
-    )
+    Returns:
+        str: Full transcript
+    """
 
-    print("\nWhisper raw result:")
-    print(result)
+    print("\nStarting audio transcription...")
 
-    # Get all Whisper segments
-    chunks = result.get("chunks", [])
+    try:
+        result = transcriber(
+            file_path,
+            chunk_length_s=30,
+            stride_length_s=(5, 5),
+            return_timestamps=True,
+            generate_kwargs={
+                "task": "transcribe",
+                "language": "english",
+            },
+        )
 
-    transcript_parts = []
+        print("\nWhisper result:")
+        print(result)
 
-    for chunk in chunks:
-        text = chunk.get("text", "").strip()
+        chunks = result.get("chunks", [])
 
-        if text:
-            transcript_parts.append(text)
+        transcript_parts = []
 
-    # If Whisper did not return chunks, use normal text output
-    if transcript_parts:
-        transcript = " ".join(transcript_parts)
-    else:
-        transcript = result.get("text", "").strip()
+        for chunk in chunks:
+            text = chunk.get("text", "").strip()
 
-    transcript = transcript.strip()
+            if text:
+                transcript_parts.append(text)
 
-    print("\n" + "=" * 60)
-    print("FULL TRANSCRIPT")
-    print("=" * 60)
-    print(transcript)
-    print("=" * 60)
+        if transcript_parts:
+            transcript = " ".join(transcript_parts)
+        else:
+            transcript = result.get("text", "").strip()
 
-    return transcript
+        transcript = transcript.strip()
+
+        print("\n" + "=" * 60)
+        print("TRANSCRIPT")
+        print("=" * 60)
+        print(transcript)
+        print("=" * 60)
+
+        return transcript
+
+    except Exception as e:
+        print(f"Transcription error: {e}")
+
+        # Don't crash the entire VoiceGuard analysis if transcription fails.
+        return ""

@@ -4,9 +4,10 @@ numpy
 soundfile
 matplotlib
 
-transformers
-torch
-torchaudio
 
 onnxruntime
 huggingface_hub
+
+transformers
+torch
+torchaudio
