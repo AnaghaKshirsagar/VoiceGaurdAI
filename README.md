@@ -136,9 +136,6 @@ pip install -r requirements.txt
 streamlit run app.py
 ```
 
-## 🎥 Demo
-<!-- Add your demo video here -->
-
 ## 👥Team Name : APEXCODERS
 
 Team Members:
