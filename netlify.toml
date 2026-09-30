@@ -1,5 +1,0 @@
-[[redirects]]
-  from = "/*"
-  to = "https://voiceguardkkw-ai.streamlit.app/:splat"
-  status = 200
-  force = true
