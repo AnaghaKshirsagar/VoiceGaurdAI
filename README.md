@@ -166,6 +166,8 @@ Team Members:
 
 5.Audio manipulation detection
 
+6.Direct access to the Phone app automatically when phone rings
+
 
 
  
